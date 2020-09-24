@@ -33,7 +33,7 @@ vcffilter -f 'QUAL > 20'  A01_var.vcf > A01_var_filtered.vcf
 echo "finished filter"
 
 #Step 6
-vcfallelicprimitives will convert variant calls to SNPs
+#vcfallelicprimitives will convert variant calls to SNPs
 vcfallelicprimitives -k -g A01_var_filtered.vcf > A01_var_decomp.vcf 
 echo "finished decomposition"
 
