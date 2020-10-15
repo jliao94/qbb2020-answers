@@ -12,7 +12,6 @@ mkdir chr19_index
 bowtie2-build chr19.fa chr19_index/chr19
 
 
-
 for sample in CTCF_ER4 CTCF_G1E input_ER4 input_G1E
 do
   bowtie2 -x chr19_index/chr19 -U ${sample}.fastq -S ${sample}.sam -p 6
@@ -21,9 +20,8 @@ do
   samtools index ${sample}.sorted.bam
 done
 
-
+#call peaks
 macs2 callpeak -t CTCF_ER4.bam -c input_ER4.bam --format=BAM --name=CTCF_ER4 --gsize=61420004
-
 macs2 callpeak -t CTCF_G1E.bam -c input_G1E.bam --format=BAM --name=CTCF_G1E --gsize=61420004
 
 #Differential binding
@@ -55,10 +53,7 @@ python3 strongPeaks.py
 bedtools getfasta -fo CTCF_ER4_100peaks.fa -fi chr19.fa -bed CTCF_ER4_100peaks.narrowPeak
 
 #run meme-chip 
-meme-chip -db /Users/cmdb/qbb2020-answers/assignment5/motif_databases/MOUSE/HOCOMOCOv11_full_MOUSE_mono_meme_format.meme CTCF_ER4_100peaks.fa
+meme-chip -meme-maxw 20 -db /Users/cmdb/qbb2020-answers/assignment5/motif_databases/JASPAR/JASPAR_CORE_2016.meme CTCF_ER4_100peaks.fa
 
-tomtom /Users/cmdb/qbb2020-answers/assignment5/memechip_out/meme_out/meme.html /Users/cmdb/qbb2020-answers/assignment5/motif_databases/JASPAR/JASPAR_CORE_2016.meme
-
-#the first motif is the strongest motif
-
+#the first motif is the strongest motif according to meme, matches known motifs in database according to tomtom
 epstopdf /Users/cmdb/qbb2020-answers/assignment5/memechip_out/meme_out/logo1.eps /Users/cmdb/qbb2020-answers/assignment5/strongestLogo.pdf
